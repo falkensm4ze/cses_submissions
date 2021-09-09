@@ -12,13 +12,13 @@ widgets = [' [',
     ]
 
 
-def codescrape(fp):
+def codescrape(fp,count):
 	soup = BeautifulSoup(fp,'html.parser')
 	name = soup.find('td', text = 'Task:').next_sibling.a.text
 	code = soup.find('pre', class_ = 'prettyprint linenums resize-horizontal')
 	if code == None:
 		return
-	with open("{}.cpp".format(name),'wt') as src:
+	with open("../{}_{}.cpp".format(count,name),'wt') as src:
 		src.write(code.contents[0])
 
 
@@ -54,7 +54,7 @@ def main():
 		if task_i == None:
 			continue
 		subm_i = session.get(gurl(task_i['href'])).text
-		codescrape(subm_i)
+		codescrape(subm_i,count)
 		bar.update(count)
 	
 	session.close()
